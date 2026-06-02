@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: logs_db
+      POSTGRES_USER: logs_user
+      POSTGRES_PASSWORD: logs_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    image: ghcr.io/ericga789/logmein-backend:latest
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: db
+      DB_NAME: logs_db
+      DB_USER: logs_user
+      DB_PASSWORD: logs_password
+      DB_PORT: 5432
+    depends_on:
+      - db
+
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+
+volumes:
+  postgres_data:
