@@ -43,15 +43,7 @@ jobs:
           DB_PASSWORD: logs_password
           DB_PORT: 5432
 
-  build-docker:
-    needs: test-backend
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build Docker image
-        run: docker build -t logmein-backend ./backend
+  
   build-and-push:
     needs: test-backend
     runs-on: ubuntu-latest
